@@ -1,0 +1,21 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredLabels
+metadata:
+  name: all-pods-must-have-owner
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces:
+     - kube-system
+     - config-management-system
+     - config-management-monitoring
+     - kube-node-lease
+     - gatekeeper-system
+  parameters:
+    message: "All pods must have an `owner` label that points to company username"
+    labels:
+      - key: cost-center
+        allowedRegex: "^[a-zA-Z]+.dpdhl.com$"
+  enforcementAction: dryrun
